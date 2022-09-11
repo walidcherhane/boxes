@@ -28,38 +28,70 @@ export const BoxesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  // update the local storage when the state changes
   useEffect(() => {
+    // the following code will make sure that any box that has parentId
+    // but the parent is not in the state will be removed
+    childrens.forEach((child) => {
+      if (child.parentId) {
+        const isParentExist = childrens.find((c) => c.id === child.parentId);
+        if (!isParentExist) {
+          deleteBox(child.id);
+        }
+      }
+    });
+    // update the local storage when the state changes
     localStorage.setItem("boxes", JSON.stringify(childrens));
   }, [childrens]);
 
   function randomColor() {
+    // https://stackoverflow.com/a/1484514/104380
     return "#" + Math.floor(Math.random() * 16777215).toString(16);
   }
 
   const addBox = (parentId?: number) => {
+    const id = Math.floor(Math.random() * 100000);
     const newBox = {
-      id: Math.floor(Math.random() * 100000),
-      value: "New Box",
-      color: randomColor(),
+      id,
       parentId,
+      value: `Box Id ${id}`,
+      color: randomColor(),
     };
     setChildrens((prev) => [...prev, newBox]);
     return newBox;
   };
 
   const createNOfBoxes = (p: number, n?: number, parentId?: number) => {
-    Array.from({ length: p }).forEach(() => {
+    // -------------------------------------------
+    // p: number of parent boxes                 |
+    // n: number of children boxes - optional    |
+    // parentId: parent id - optional            |
+    // -------------------------------------------
+
+    // if we don't pass p, we create n boxes inside the box with id = parentId
+    if (!p && parentId && n) {
+      let id = parentId;
+      for (let i = 0; i < n; i++) {
+        const child = addBox(id);
+        id = child.id;
+      }
+      return;
+    }
+    // we have p, means create p boxes with n childrens each
+    for (let i = 0; i < p; i++) {
+      // id here can be undefined if we don't pass parentId
+      // if so, the box will be created in the root
+      // we use its id to create the childrens
+      let id = parentId;
       const parent = addBox(parentId);
-      let id = parent.id;
+      id = parent.id;
       if (!n) return;
-      for (let index = 0; index < n; index++) {
+      for (let j = 0; j < n; j++) {
         const newChild = addBox(id);
+        // swap the id with the new child id
         id = newChild.id;
       }
-    });
+    }
   };
-
   const deleteBox = (boxId: number) => {
     const newChildrens = childrens.filter((box) => box.id !== boxId);
     setChildrens(newChildrens);

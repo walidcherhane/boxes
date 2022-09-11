@@ -16,9 +16,9 @@ function AddBoxesForm() {
     <>
       <form
         onSubmit={onSubmit}
-        className="bg-gray-50 border-2 flex flex-col p-8 fixed top-4 right-4"
+        className="bg-indigo-50/30 border border-gray-400 flex flex-col rounded-md p-8 "
       >
-        <label htmlFor="boxes" className="text-sm mb-1">
+        <label htmlFor="boxes" className="text-sm mb-4">
           Enter Boxes Number
         </label>
         <input
@@ -26,9 +26,9 @@ function AddBoxesForm() {
           name="p"
           min={0}
           defaultValue={2}
-          className="px-5 py-2 border outline-none"
-        />
-        <label htmlFor="childrens" className="text-sm mb-1 mt-8">
+          className="w-full px-5 py-2 border border-gray-900 placeholder:text-gray-800 rounded-md outline-none mr-2 bg-transparent text-black" 
+          />
+        <label htmlFor="childrens" className="text-sm mb-4 mt-8">
           Enter Childrens Number
         </label>
         <input
@@ -36,9 +36,9 @@ function AddBoxesForm() {
           name="n"
           min={0}
           defaultValue={3}
-          className="px-5 py-2 border outline-none"
-        />
-        <input type="submit" className="bg-gray-800 text-white py-2 mt-4" />
+          className="w-full px-5 py-2 border border-gray-900 placeholder:text-gray-800 rounded-md outline-none mr-2 bg-transparent text-black" 
+          />
+        <input type="submit" className="bg-gray-800 text-white py-2 mt-4 rounded-md" />
       </form>
     </>
   );
